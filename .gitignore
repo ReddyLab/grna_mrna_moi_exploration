@@ -1,0 +1,14 @@
+# python
+venv
+
+# data
+lexi
+tyler
+
+# emacs
+*~
+
+# vscode
+*.code-workspace
+
+python
