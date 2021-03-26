@@ -27,30 +27,30 @@ done
 ./gen_stats.py -i lexi/guides_per_cell_from_largest_guide_pair_set.txt -o lexi/guides_per_cell_from_largest_guide_pair_set_stats.txt
 rm lexi/guides_per_cell_from_largest_guide_pair_set.txt
 
-echo "generate clumps"
-rm lexi/guide_cells_per_combo_2_clumped.txt
-./gen_clumps.py -i lexi/guide_cells_per_combo_2.txt -o lexi/guide_cells_per_combo_2_clumped.txt
+echo "generate clusters"
+rm lexi/guide_cells_per_combo_2_clustered.txt
+./gen_clumps.py -i lexi/guide_cells_per_combo_2.txt -o lexi/guide_cells_per_combo_2_clustered.txt
 
-echo "total clump count"
-grep "##" lexi/guide_cells_per_combo_2_clumped.txt | awk '{if($3 > 0){print $3}}' | wc -l
+echo "total cluster count"
+grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{if($3 > 0){print $3}}' | wc -l
 
-echo "clump > 1 count"
-grep "##" lexi/guide_cells_per_combo_2_clumped.txt | awk '{if($3 > 1){print $3}}' | wc -l
+echo "cluster > 1 count"
+grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{if($3 > 1){print $3}}' | wc -l
 
-echo "10 biggest clumps"
-grep "##" lexi/guide_cells_per_combo_2_clumped.txt | awk '{print $3}' | sort -rn | head
+echo "10 biggest clusters"
+grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{print $3}' | sort -rn | head
 
-echo "10 smallest clumps"
-grep "##" lexi/guide_cells_per_combo_2_clumped.txt | awk '{print $3}' | sort -n | head
+echo "10 smallest clusters"
+grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{print $3}' | sort -n | head
 
-echo "clump size stats"
-grep "##" lexi/guide_cells_per_combo_2_clumped.txt | awk '{print $3}' | ./gen_stats.py -o lexi/guide_cells_per_combo_2_clumped_stats.txt
+echo "cluster size stats"
+grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{print $3}' | ./gen_stats.py -o lexi/guide_cells_per_combo_2_clustered_stats.txt
 
-echo "clump size histogram"
-grep "##" lexi/guide_cells_per_combo_2_clumped.txt | awk '{print $3}' | \
-./gen_hist.py -o lexi/guide_cells_per_combo_2_clumped_hist.png \
+echo "cluster size histogram"
+grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{print $3}' | \
+./gen_hist.py -o lexi/guide_cells_per_combo_2_clustered_hist.png \
     -b 800 \
-    -x "Clump size" \
+    -x "Cluster size" \
     -y "Frequency"
 
 echo "guide 2-tuple cell count"
