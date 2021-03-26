@@ -25,7 +25,7 @@ def plot(values, max_value, bin_count, title='', x_label='', y_label='', density
     ax.set_title(title)
 
     # create x-axis ticks
-    step = int(round(max_value/10, -1)) # 10 nice steps
+    step = max(int(round(max_value/10, -1)), 1) # 10 nice steps
     ticks = range(0, max_value, step)
     ax.set_xticks(ticks)
 
