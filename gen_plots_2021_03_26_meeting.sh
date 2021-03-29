@@ -11,8 +11,8 @@ wc -l lexi/guides_per_cell.txt
 awk '{if($1 == 3){print $1, $2}}' lexi/guides_per_cell.txt | wc -l
 
 
-Get the ids of the cells from guide pair in the most cells
-plus histogram and stats
+# Get the ids of the cells from guide pair in the most cells
+# plus histogram and stats
 
 CELLS=`sort -k 2n lexi/guide_cells_per_combo_2.txt | tail -n -1 | awk '{$1 = ""; $2 = ""; print $0}'`
 for c in $CELLS; do
@@ -84,3 +84,64 @@ awk '{print $2}' lexi/guide_cells_per_combo_4.txt > lexi/counts.txt
 ./gen_stats.py -i lexi/counts.txt -o lexi/guide_cells_per_combo_4_stats.txt
 
 rm lexi/counts.txt
+
+echo "how many reads per guide in cells with 1 or 2 guides"
+./gen_guide_read_per_cell.py -i lexi/guide.mtx -o lexi/guide_umis_per_cell.txt
+awk '{if($2 == 1){print $0}}' lexi/guide_umis_per_cell.txt > lexi/guide_umis_per_cell_1_guide.txt
+awk '{if($2 == 2){print $0}}' lexi/guide_umis_per_cell.txt > lexi/guide_umis_per_cell_2_guide.txt
+
+echo "1 guide"
+awk '{print $3}' lexi/guide_umis_per_cell_1_guide.txt | awk -F ',' '{print $2}' | tr -d ')' | \
+./gen_stats.py -o lexi/guide_umis_per_cell_1_guide_stats.py
+awk '{print $3}' lexi/guide_umis_per_cell_1_guide.txt | awk -F ',' '{print $2}' | tr -d ')' | \
+./gen_hist.py -o lexi/guide_umis_per_cell_1_guide_hist.png \
+  -b 60 \
+  -x "UMI Count" \
+  -y "Frequency" \
+  -t "UMI Counts from Cells with One Guide"
+
+echo "2 guides"
+./gen_cell_guide_pair_umi_diffs.py -i lexi/guide_umis_per_cell_2_guide.txt
+
+echo "how many cells are guides in?"
+awk '{if($3 > 4){print $1}}' lexi/guide.mtx | sort -n | uniq -c | ./gen_stats.py -o lexi/cells_per_guide_stats.txt
+awk '{if($3 > 4){print $1}}' lexi/guide.mtx | sort -n | uniq -c | ./gen_hist.py -o lexi/cells_per_guide_hist.png \
+  -b 60 \
+  -x "Cell Count" \
+  -y "Frequency" \
+  -t "UMI Counts from Cells with One Guide"
+
+echo "how many guides in cells in largest single guide pair group"
+rm lexi/guide_umis_per_cell_from_largest_guide_pair_set.txt
+for c in $CELLS; do
+  grep -e "^$c " lexi/guide_umis_per_cell.txt >> lexi/guide_umis_per_cell_from_largest_guide_pair_set.txt
+done
+
+awk '{print $2}' lexi/guide_umis_per_cell_from_largest_guide_pair_set.txt | ./gen_stats.py -o lexi/guides_per_cell_from_largest_guide_pair_set_stats.txt
+awk '{print $2}' lexi/guide_umis_per_cell_from_largest_guide_pair_set.txt | ./gen_hist.py -o lexi/guides_per_cell_from_largest_guide_pair_set_hist.png \
+    -b 70 \
+    -x "Guides per cell" \
+    -y "Frequency" \
+    -t "Guide Cell from Largest Guide Pair set"
+
+
+echo "How many total guides do the cells in the pair with the largest cell count have?"
+rm lexi/guide_umis_largest_guide_pair_set.txt
+for c in $CELLS; do
+    GUIDES=`grep -e"^$c " lexi/guide_umis_per_cell.txt | awk '{$1 = ""; $2 = ""; print $0}'`
+    for guide in $GUIDES; do
+        echo $guide | awk -F ',' '{print $1}' | tr -d '(' >> lexi/guide_umis_largest_guide_pair_set.txt
+    done
+done
+wc -l lexi/guide_umis_largest_guide_pair_set.txt
+
+echo "How many of those guides are unique?"
+sort lexi/guide_umis_largest_guide_pair_set.txt | uniq -c | wc -l
+
+echo "how common are the guides in the pair in the largest number of cells?"
+GUIDES=`sort -k 2n lexi/guide_cells_per_combo_2.txt | tail -n -1 | awk '{print $1}' | tr -d '()' | tr ',' ' '`
+for guide in $GUIDES; do
+    echo "Guide $guide: \c"
+    grep -e "^$guide " lexi/guide.mtx | wc -l
+done
+rm lexi/guides_per_cell_from_largest_guide_pair_set.txt
