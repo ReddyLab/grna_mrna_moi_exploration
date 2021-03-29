@@ -1,3 +1,6 @@
+# lexi/guide.mtx copied from HARDAC:
+# /gpfs/fs1/data/gersbachlab/susan/susan/10x/lexi/guide.mtx.gz
+
 echo "generate all the guide combinations of size k (default 2) in each cell"
 ./gen_guide_combos.py -i lexi/guide.mtx -o lexi/guide_combinations_2.txt
 # k = 3, 4, and especially 5 generate large files and shouldn't be run by default.
