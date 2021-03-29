@@ -1,3 +1,19 @@
+echo "generate all the guide combinations of size k (default 2) in each cell"
+./gen_guide_combos.py -i lexi/guide.mtx -o lexi/guide_combinations_2.txt
+# k = 3, 4, and especially 5 generate large files and shouldn't be run by default.
+# ./gen_guide_combos.py -i lexi/guide.mtx -o lexi/guide_combinations_3.txt -k 3
+# ./gen_guide_combos.py -i lexi/guide.mtx -o lexi/guide_combinations_4.txt -k 4
+# ./gen_guide_combos.py -i lexi/guide.mtx -o lexi/guide_combinations_5.txt -k 5
+
+echo "generate a list of cells with each guide combinations"
+./gen_cells_per_guide_combo.py -i lexi/guide_combinations_2.txt -o lexi/guide_cells_per_combo_2.txt
+
+# 3, 4, and especially 5 generate very large files and require a huge amount of memory
+# and shouldn't be run by default.
+# ./gen_cells_per_guide_combo.py -i lexi/guide_combinations_3.txt -o lexi/guide_cells_per_combo_3.txt
+# ./gen_cells_per_guide_combo.py -i lexi/guide_combinations_4.txt -o lexi/guide_cells_per_combo_4.txt
+# ./gen_cells_per_guide_combo.py -i lexi/guide_combinations_5.txt -o lexi/guide_cells_per_combo_5.txt
+
 echo "how many guides each cell has"
 tail -n +5 lexi/guide.mtx | awk '{if($3 > 4) {print $2}}' | uniq -c | sort -k 1n,2n > lexi/guides_per_cell.txt
 ./gen_hist.py -i lexi/guides_per_cell.txt \
