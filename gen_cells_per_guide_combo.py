@@ -23,8 +23,8 @@ def get_combo_cells(input):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Generates cells per combination data.')
-    parser.add_argument('-i', '--input', default=None, help="input file with cell and combo values")
-    parser.add_argument('-o', '--output', default=None, help="output file for stats")
+    parser.add_argument('-i', '--input', default=None, help="input file with cell and combo values (output of gen_guide_combos.py)")
+    parser.add_argument('-o', '--output', default=None, help="output file")
     args = parser.parse_args()
     return args.input, args.output
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     if output_file is None:
         out = sys.stdout
     else:
-        out = open(output_file, "a")
+        out = open(output_file, "w")
 
     with io.StringIO() as output_buffer:
         lines = 0

@@ -52,7 +52,7 @@ def grna_set_combinations(grna_sets, combo_size):
                 yield (combo_size, cell_1, cell_2, combo)
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Generates a file of all shared gRNA combos of a given size  between all cells.')
+    parser = argparse.ArgumentParser(description='Generates a file of all shared gRNA combos of a given size between all cells.')
     parser.add_argument('-i', '--input', default=None, help="Input MatrixMarket file")
     parser.add_argument('-o', '--output', default=None, help="Output file with four datums: 1) combo size 2) cell id 1 3) cell id 2 4) subject combo")
     parser.add_argument('-f', '--umifilter', default=5, type=int, help="minimum umi count to include per gRNA/cell")
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     if output_file is None:
         out = sys.stdout
     else:
-        out = open(output_file, "a")
+        out = open(output_file, "w")
 
     with io.StringIO() as output_buffer:
         lines = 0

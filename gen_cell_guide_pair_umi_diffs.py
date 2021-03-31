@@ -25,7 +25,7 @@ def get_umi_ratios(input):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Generates information about umi differences in cells with two guides.')
-    parser.add_argument('-i', '--input', default=None, help="Input of guides per cell where each cell has two guides")
+    parser.add_argument('-i', '--input', default=None, help="Input of guides per cell where each cell has two guides\nThis is the output of gen_guide_read_per_cell.py filtered for 2 guides.")
     parser.add_argument('-o', '--output', default=None, help="Output file with two columns: 1) cell count 2) cell id")
     args = parser.parse_args()
     return args.input, args.output
