@@ -62,3 +62,18 @@ ex. `(123,456) 4 123 6 95609586 6778`
 
 ## gen_combo_plot.py
 `gen_combo_plot.py` is an experiment to generate a useful visualization of the output of `gen_cells_per_guide_combo.py`. Not yet successful.
+
+## gen_cell_guide_pair_umi_diffs.py
+Generates information about umi differences in cells with two guides.
+
+## gen_cells_per_guide_combo_rc_filter.py
+This is like gen_cells_per_guide_combo.py, above, but includes a filter, `filter_pairs` that removes pairs if their bases, or reverse compliment bases, are too simlar.
+
+## gen_clusters.py
+Processes output of guide_cells_per_guide_combo.py to find "clusters" of cells with the same guide. The clustering "algorithm" can be modified by changing the `belong`, `add`, and `fit` methods of `Cluster`.
+
+## gen_guide_read_per_cell.py
+Generates guide reads per cell counts. This results in a file with row of 1) cell id 2) guide count 3) list of (guide id,read count) pairs
+
+## gen_plots_2021_03_26_meeting.sh
+This is a script for generating data and figures used in slides presented on 2021/03/26. It also generates stats and figures used in a follow-up email chain.
