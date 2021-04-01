@@ -56,7 +56,7 @@ rm lexi/guides_per_cell_from_largest_guide_pair_set.txt
 
 echo "generate clusters"
 rm lexi/guide_cells_per_combo_2_clustered.txt
-./gen_clumps.py -i lexi/guide_cells_per_combo_2_filtered.txt -o lexi/guide_cells_per_combo_2_clustered.txt
+./gen_clusters.py -i lexi/guide_cells_per_combo_2_filtered.txt -o lexi/guide_cells_per_combo_2_clustered.txt
 
 echo "total cluster count"
 grep "##" lexi/guide_cells_per_combo_2_clustered.txt | awk '{if($3 > 0){print $3}}' | wc -l
