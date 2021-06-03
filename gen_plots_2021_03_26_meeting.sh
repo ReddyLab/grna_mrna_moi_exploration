@@ -23,7 +23,61 @@ awk '{print NR, $0}' lexi/lexi_scrna.guides.txt > lexi/lexi_scrna_guideid_guide.
 echo "filter out guide combinations that are reverse compliments (within the bounds of a minimum edit distance) of each other"
 ./gen_cells_per_guide_combo_rc_filter.py -i lexi/guide_cells_per_combo_2.txt \
   -g lexi/lexi_scrna_guideid_guide.txt \
-  -o lexi/guide_cells_per_combo_2_filtered.txt
+  -t 1 \
+  -o lexi/guide_cells_per_combo_2_filtered_1.txt
+
+./gen_cells_per_guide_combo_rc_filter.py -i lexi/guide_cells_per_combo_2.txt \
+  -g lexi/lexi_scrna_guideid_guide.txt \
+  -t 2 \
+  -o lexi/guide_cells_per_combo_2_filtered_2.txt
+
+./gen_cells_per_guide_combo_rc_filter.py -i lexi/guide_cells_per_combo_2.txt \
+  -g lexi/lexi_scrna_guideid_guide.txt \
+  -t 1 \
+  -r \
+  -o lexi/guide_cells_per_combo_2_filtered_1r.txt
+
+./gen_cells_per_guide_combo_rc_filter.py -i lexi/guide_cells_per_combo_2.txt \
+  -g lexi/lexi_scrna_guideid_guide.txt \
+  -t 2 \
+  -r \
+  -o lexi/guide_cells_per_combo_2_filtered_2r.txt
+
+echo "Chromosome location vs. \"co-occurrance\" measure"
+# Co-occurrance measure of a pair of guides is x/p where
+#  x = how many cells those guides are in together
+#  p = how many total guides pairs there are
+
+# Plot based on various filterings
+P=`wc -l lexi/guide_cells_per_combo_2.txt | awk '{print $1}'`
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot.png \
+  -t "co-occurrance by chromosomal distance"
+
+P=`wc -l lexi/guide_cells_per_combo_2_filtered_1.txt | awk '{print $1}'`
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 1)" \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_filter_1.png
+
+P=`wc -l lexi/guide_cells_per_combo_2_filtered_2.txt | awk '{print $1}'`
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 2)" \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_filter_2.png
+
+P=`wc -l lexi/guide_cells_per_combo_2_filtered_1r.txt | awk '{print $1}'`
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 1 inc. rev. compliment)" \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_filter_1r.png
+
+P=`wc -l lexi/guide_cells_per_combo_2_filtered_2r.txt | awk '{print $1}'`
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 2 inc. rev. compliment)" \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_filter_2r.png
 
 echo "how many guides each cell has"
 tail -n +5 lexi/guide.mtx | awk '{if($3 > 4) {print $2}}' | uniq -c | sort -k 1n,2n > lexi/guides_per_cell.txt

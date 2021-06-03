@@ -75,5 +75,8 @@ Processes output of guide_cells_per_guide_combo.py to find "clusters" of cells w
 ## gen_guide_read_per_cell.py
 Generates guide reads per cell counts. This results in a file with row of 1) cell id 2) guide count 3) list of (guide id,read count) pairs
 
+## gen_cooccurrance_plot.py
+Generates a scatterplot of total # guide pairs vs. the chromosomal distance between the pairs.
+
 ## gen_plots_2021_03_26_meeting.sh
 This is a script for generating data and figures used in slides presented on 2021/03/26. It also generates stats and figures used in a follow-up email chain.

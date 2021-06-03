@@ -7,6 +7,14 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
+def floatRange(start, stop, step):
+    l = []
+    x = start
+    while x < stop:
+        l.append(x)
+        x += step
+    return l
+
 def plot(values, max_value, bin_count, title='', x_label='', y_label='', density=False):
     fig, ax = plt.subplots()
 
@@ -25,8 +33,8 @@ def plot(values, max_value, bin_count, title='', x_label='', y_label='', density
     ax.set_title(title)
 
     # create x-axis ticks
-    step = max(int(round(max_value/10, -1)), 1) # 10 nice steps
-    ticks = range(0, max_value, step)
+    step = max(int(round(max_value/10, -1)), 1) if max_value >= 10 else max_value/10 # 10 nice steps
+    ticks = floatRange(0, max_value, step)
     ax.set_xticks(ticks)
 
     # Tweak spacing to prevent clipping of ylabel
@@ -38,7 +46,7 @@ def get_values(input):
     values = []
     max_value = 0
     for line in input:
-        value = int(line.strip().split()[0])
+        value = float(line.strip().split()[0])
         values.append(value)
         if value > max_value:
             max_value = value

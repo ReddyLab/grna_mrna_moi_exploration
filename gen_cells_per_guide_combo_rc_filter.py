@@ -3,13 +3,10 @@
 import argparse
 import io
 
-import math
-import statistics as stat
 import sys
 
 from functools import lru_cache
 
-DISTANCE_THRESHOLD = 2
 BASE_COMP_TABLE = str.maketrans('ATCG', 'TAGC')
 
 # Calculate Levenshtein distance
@@ -33,16 +30,20 @@ def lev(a, b):
 def rev_comp(bases):
     return bases[::-1].translate(BASE_COMP_TABLE)
 
-def filter_pairs(input, guide_lookup):
+def filter_pairs(input, guide_lookup, distance_threshold, reverse):
     keep_lines = []
     for line in input:
         guide_pair, _rest = line.split(maxsplit=1)
         grna_id1, grna_id2 = guide_pair.strip('()').split(',')
         lev_dist = lev(guide_lookup[grna_id1], guide_lookup[grna_id2])
-        rev_comp_lev_dist = lev(guide_lookup[grna_id1], rev_comp(guide_lookup[grna_id2]))
-        if lev_dist > DISTANCE_THRESHOLD and rev_comp_lev_dist > DISTANCE_THRESHOLD:
-        # if lev_dist > DISTANCE_THRESHOLD and guide_lookup[grna_id1] != rev_comp(guide_lookup[grna_id2]):
-            keep_lines.append(line)
+        # if lev_dist > distance_threshold and guide_lookup[grna_id1] != rev_comp(guide_lookup[grna_id2]):
+        if reverse:
+            rev_comp_lev_dist = lev(guide_lookup[grna_id1], rev_comp(guide_lookup[grna_id2]))
+            if lev_dist > distance_threshold and rev_comp_lev_dist > distance_threshold:
+                keep_lines.append(line)
+        else:
+            if lev_dist > distance_threshold:
+                keep_lines.append(line)
     return keep_lines
 
 def parse_args():
@@ -50,11 +51,13 @@ def parse_args():
     parser.add_argument('-i', '--input', default=None, help="input file that is the output of gen_cells_per_guide_combo.py")
     parser.add_argument('-g', '--guides', required=True, help="input file with two columns: 1) guide id 2) guide")
     parser.add_argument('-o', '--output', default=None, help="output file")
+    parser.add_argument('-t', '--threshold', type=int, default=2, help="minimum edit distance threshold for filtering out pairs")
+    parser.add_argument('-r', '--reverse', action='store_const', const=True, default=False, help="filter based on the reverse compliment as well")
     args = parser.parse_args()
-    return args.input, args.guides, args.output
+    return args.input, args.guides, args.output, args.threshold, args.reverse
 
 if __name__ == "__main__":
-    input_file, guide_file, output_file = parse_args()
+    input_file, guide_file, output_file, distance_threshold, reverse = parse_args()
 
     guide_lookup = {} # k: guide id, v: guide bases
     with open(guide_file) as guide_lines:
@@ -65,9 +68,9 @@ if __name__ == "__main__":
 
     if input_file is not None:
         with open(input_file) as input:
-            grna_sets = filter_pairs(input, guide_lookup)
+            grna_sets = filter_pairs(input, guide_lookup, distance_threshold, reverse)
     else:
-        grna_sets = filter_pairs(sys.stdin, guide_lookup)
+        grna_sets = filter_pairs(sys.stdin, guide_lookup, distance_threshold, reverse)
 
     if output_file is None:
         out = sys.stdout
