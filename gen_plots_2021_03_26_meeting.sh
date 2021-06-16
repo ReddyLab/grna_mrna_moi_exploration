@@ -55,11 +55,53 @@ P=`wc -l lexi/guide_cells_per_combo_2.txt | awk '{print $1}'`
   -o lexi/guide_cooccurrance_chrom_dist_plot.png \
   -t "co-occurrance by chromosomal distance"
 
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_edit_dist.png \
+  --edit-dist \
+  -y "edit distance" \
+  -t "co-occurrance by edit distance"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_rev_edit_dist.png \
+  --rev-edit-dist \
+  -y "edit distance of rev. comp." \
+  -t "co-occurrance by reverse compliment edit distance"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_min_edit_dist.png \
+  --min-edit-dist \
+  -y "min(edit distance, edit distance of rev. comp.)" \
+  -t "co-occurrance by min(edit distance, rev. comp. edit distance)"
+
 P=`wc -l lexi/guide_cells_per_combo_2_filtered_1.txt | awk '{print $1}'`
 ./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1.txt -g lexi/lexi_scrna_guideid_guide.txt \
   -p ${P} \
   -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 1)" \
   -o lexi/guide_cooccurrance_chrom_dist_plot_filter_1.png
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_edit_dist_filter_1.png \
+  --edit-dist \
+  -y "edit distance" \
+  -t "co-occurrance by edit distance\n(guides filtered by edit distance > 1)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_rev_edit_dist_filter_1.png \
+  --rev-edit-dist \
+  -y "edit distance of rev. comp." \
+  -t "co-occurrance by reverse compliment edit distance\n(guides filtered by edit distance > 1)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_min_edit_dist_filter_1.png \
+  --min-edit-dist \
+  -y "min(edit distance, edit distance of rev. comp.)" \
+  -t "co-occurrance by co-occurrance by min(edit distance, rev. comp. edit distance)\n(guides filtered by edit distance > 1)"
 
 P=`wc -l lexi/guide_cells_per_combo_2_filtered_2.txt | awk '{print $1}'`
 ./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
@@ -67,17 +109,80 @@ P=`wc -l lexi/guide_cells_per_combo_2_filtered_2.txt | awk '{print $1}'`
   -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 2)" \
   -o lexi/guide_cooccurrance_chrom_dist_plot_filter_2.png
 
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_edit_dist_filter_2.png \
+  --edit-dist \
+  -y "edit distance" \
+  -t "co-occurrance by edit distance\n(guides filtered by edit distance > 2)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_rev_edit_dist_filter_2.png \
+  --rev-edit-dist \
+  -y "edit distance of rev. comp." \
+  -t "co-occurrance by reverse compliment edit distance\n(guides filtered by edit distance > 2)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_min_edit_dist_filter_2.png \
+  --min-edit-dist \
+  -y "min(edit distance, edit distance of rev. comp.)" \
+  -t "co-occurrance by co-occurrance by min(edit distance, rev. comp. edit distance)\n(guides filtered by edit distance > 2)"
+
 P=`wc -l lexi/guide_cells_per_combo_2_filtered_1r.txt | awk '{print $1}'`
 ./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1r.txt -g lexi/lexi_scrna_guideid_guide.txt \
   -p ${P} \
   -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 1 inc. rev. compliment)" \
   -o lexi/guide_cooccurrance_chrom_dist_plot_filter_1r.png
 
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_edit_dist_filter_1r.png \
+  --edit-dist \
+  -y "edit distance" \
+  -t "co-occurrance by edit distance\n(guides filtered by edit distance > 1 inc. rev. compliment)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_rev_edit_dist_filter_1r.png \
+  --rev-edit-dist \
+  -y "edit distance of rev. comp." \
+  -t "co-occurrance by reverse compliment edit distance\n(guides filtered by edit distance > 1 inc. rev. compliment)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_1r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_min_edit_dist_filter_1r.png \
+  --min-edit-dist \
+  -y "min(edit distance, edit distance of rev. comp.)" \
+  -t "co-occurrance by co-occurrance by min(edit distance, rev. comp. edit distance)\n(guides filtered by edit distance > 1 inc. rev. compliment)"
+
 P=`wc -l lexi/guide_cells_per_combo_2_filtered_2r.txt | awk '{print $1}'`
 ./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2r.txt -g lexi/lexi_scrna_guideid_guide.txt \
   -p ${P} \
   -t "co-occurrance by chromosomal distance\n(guides filtered by edit distance > 2 inc. rev. compliment)" \
   -o lexi/guide_cooccurrance_chrom_dist_plot_filter_2r.png
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_edit_dist_filter_2r.png \
+  --edit-dist \
+  -y "edit distance" \
+  -t "co-occurrance by edit distance\n(guides filtered by edit distance > 2 inc. rev. compliment)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_rev_edit_dist_filter_2r.png \
+  --rev-edit-dist \
+  -y "edit distance of rev. comp." \
+  -t "co-occurrance by reverse compliment edit distance\n(guides filtered by edit distance > 2 inc. rev. compliment)"
+
+./gen_cooccurrance_plot.py -i lexi/guide_cells_per_combo_2_filtered_2r.txt -g lexi/lexi_scrna_guideid_guide.txt \
+  -p ${P} \
+  -o lexi/guide_cooccurrance_chrom_dist_plot_min_edit_dist_filter_2r.png \
+  --min-edit-dist \
+  -y "min(edit distance, edit distance of rev. comp.)" \
+  -t "co-occurrance by co-occurrance by min(edit distance, rev. comp. edit distance)\n(guides filtered by edit distance > 2 inc. rev. compliment)"
 
 echo "how many guides each cell has"
 tail -n +5 lexi/guide.mtx | awk '{if($3 > 4) {print $2}}' | uniq -c | sort -k 1n,2n > lexi/guides_per_cell.txt

@@ -33,6 +33,9 @@ class Guide:
         guide_rev_comp = guide.bases[::-1].translate(Guide.BASE_COMP_TABLE)
         return self._lev(self.bases, guide_rev_comp)
 
+    def min_edit_dist(self, guide):
+        return min(self.edit_dist(guide), self.rev_compliment_edit_dist(guide))
+
     @lru_cache
     def _lev(self, a, b):
         if len(a) == 0: return len(b)
@@ -86,10 +89,20 @@ def parse_args():
     parser.add_argument('-o', '--output', default=None, help="output file for plot image")
     parser.add_argument('-p', '--paircount', type=int, default=755069, help="total number of guide pairs")
     parser.add_argument('-t', '--title', default='', help="plot title")
-    parser.add_argument('-x', '--xlabel', default='', help="label for the x-axis")
-    parser.add_argument('-y', '--ylabel', default='', help="label for the y-axis")
+    parser.add_argument('-x', '--x-label', default='pair cell count / total # pairs', help="label for the x-axis")
+    parser.add_argument('-y', '--y-label', default='genomic coordinate midpoint difference', help="label for the y-axis")
+    distance_methods = parser.add_mutually_exclusive_group()
+    distance_methods.add_argument('--chrom-dist', dest='dist_method', action='store_const',
+                    const='dist', default='dist', help='measure distance by chromosomal distance')
+    distance_methods.add_argument('--edit-dist', dest='dist_method', action='store_const',
+                    const='edit_dist', help='measure distance by Levenshtein distance')
+    distance_methods.add_argument('--rev-edit-dist', dest='dist_method', action='store_const',
+                    const='rev_compliment_edit_dist', help='measure distance by Levenshtein distance of reverse compliment')
+    distance_methods.add_argument('--min-edit-dist', dest='dist_method', action='store_const',
+                    const='min_edit_dist', help='measure distance by minimum of 1) Levenshtein distance and 2) Levenshtein distance of reverse compliment')
+
     args = parser.parse_args()
-    return args.input, args.guidemapping, args.output, args.paircount, args.title, args.xlabel, args.ylabel
+    return args.input, args.guidemapping, args.output, args.paircount, args.title, args.x_label, args.y_label, args.dist_method
 
 def parse_guides(guidefile):
     guides = {}
@@ -117,7 +130,7 @@ def parse_from(file, parse_func, alt=sys.stdin):
         return parse_func(alt)
 
 if __name__ == "__main__":
-    input_file, guidemapping_file, output_file, pair_count, title, x_label, y_label = parse_args()
+    input_file, guidemapping_file, output_file, pair_count, title, x_label, y_label, dist_method = parse_args()
 
     guides = parse_guides(guidemapping_file)
 
@@ -130,7 +143,8 @@ if __name__ == "__main__":
         guide1 = guides.get(g1, False)
         guide2 = guides.get(g2, False)
         if guide1 and guide2:
-            pair_distances.append(guide1.dist(guide2))
+            dist = getattr(guide1, dist_method)(guide2)
+            pair_distances.append(dist)
         else:
             pair_distances.append(np.nan)
 
@@ -139,7 +153,7 @@ if __name__ == "__main__":
     pair_distances = np.delete(pair_distances, nan_indices)
     scaled_counts = np.delete(scaled_counts, nan_indices)
 
-    fig = plot(scaled_counts, pair_distances, [1 for _ in scaled_counts], title=title, x_label="pair cell count / total # pairs", y_label="chromosomal distance")
+    fig = plot(scaled_counts, pair_distances, [1 for _ in scaled_counts], title=title, x_label=x_label, y_label=y_label)
 
     if output_file is None:
         plt.show()
