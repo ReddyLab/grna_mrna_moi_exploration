@@ -46,7 +46,8 @@ def get_values(input):
     values = []
     max_value = 0
     for line in input:
-        value = float(line.strip().split()[0])
+        num = line.strip().split()
+        value = float(num[0])
         values.append(value)
         if value > max_value:
             max_value = value
