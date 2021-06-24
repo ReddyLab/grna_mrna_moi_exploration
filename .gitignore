@@ -12,3 +12,5 @@ tyler
 *.code-workspace
 
 python
+__pycache__
+*.pyc
