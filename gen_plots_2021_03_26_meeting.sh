@@ -311,7 +311,7 @@ awk '{print $2}' lexi/guide_umis_per_cell_from_largest_guide_pair_set.txt | ./ge
     -t "Guide Cell from Largest Guide Pair set"
 
 echo "What edit distances co-occur with a particular target edit distance?"
-./gen_cooccurrance_hist.py -i lexi/guide_umis_per_cell.txt -g lexi/lexi_scrna_guideid_guide.txt -o lexi/gen_cooccurrance_hist -t 0
+./gen_cooccurrance_hist.py -i lexi/guide_umis_per_cell.txt -g lexi/lexi_scrna_guideid_guide.txt -o lexi/gen_cooccurrance_hist
 ./gen_hist.py -i lexi/gen_cooccurrance_hist_0 -t "Edit Distances that co-occur with an edit distance of 0" -o lexi/gen_cooccurrance_hist_plot_0.png -x "Edit Distances" -y "Counts"
 ./gen_hist.py -i lexi/gen_cooccurrance_hist_1 -t "Edit Distances that co-occur with an edit distance of 1" -o lexi/gen_cooccurrance_hist_plot_1.png -x "Edit Distances" -y "Counts"
 ./gen_hist.py -i lexi/gen_cooccurrance_hist_2 -t "Edit Distances that co-occur with an edit distance of 2" -o lexi/gen_cooccurrance_hist_plot_2.png -x "Edit Distances" -y "Counts"

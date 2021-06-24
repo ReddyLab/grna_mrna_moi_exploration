@@ -11,49 +11,8 @@ Output:
 import argparse
 import itertools
 import sys
-import numpy as np
-import matplotlib.pyplot as plt
 
-from functools import lru_cache
-
-class Guide:
-    BASE_COMP_TABLE = str.maketrans('ATCG', 'TAGC')
-
-    def __init__(self, chrom: str, start: int , end: int, strand: str, bases: str):
-        self.chrom = chrom
-        self.start = start
-        self.end = end
-        self.strand = strand
-        self.bases = bases
-        self.location = round((self.end + self.start) / 2)
-
-    def dist(self, guide):
-        if self.location > guide.location:
-            return self.location - guide.location
-
-        return guide.location - self.location
-
-    def edit_dist(self, guide):
-        return self._lev(self.bases, guide.bases)
-
-    def rev_compliment_edit_dist(self, guide):
-        guide_rev_comp = guide.bases[::-1].translate(Guide.BASE_COMP_TABLE)
-        return self._lev(self.bases, guide_rev_comp)
-
-    def min_edit_dist(self, guide):
-        return min(self.edit_dist(guide), self.rev_compliment_edit_dist(guide))
-
-    @lru_cache
-    def _lev(self, a, b):
-        if len(a) == 0: return len(b)
-        if len(b) == 0: return len(a)
-        if a[0] == b[0]: return self._lev(a[1:], b[1:])
-
-        return 1 + min(
-            self._lev(a, b[1:]),
-            self._lev(a[1:], b),
-            self._lev(a[1:], b[1:])
-        )
+from Guide import Guide, parse_guides
 
 def get_values(input):
     guide_pairs = []
@@ -73,24 +32,6 @@ def parse_args():
 
     args = parser.parse_args()
     return args.input, args.guidemapping, args.output
-
-def parse_guides(guidefile):
-    guides = {}
-    with open(guidefile) as guide_lines:
-        for guide_line in guide_lines:
-            line, guide = guide_line.split(' ', maxsplit=1)
-            line = int(line)
-            if not guide.startswith('chr'):
-                continue
-            guide_data = guide.split('-')
-            if len(guide_data) == 6:
-                guide_data[3] = '-'
-                del guide_data[4]
-            chrom, start, end, strand, bases = guide_data
-            start = int(start)
-            end = int(end)
-            guides[line] = Guide(chrom, start, end, strand, bases)
-    return guides
 
 def parse_from(file, parse_func, alt=sys.stdin):
     if file is not None:
