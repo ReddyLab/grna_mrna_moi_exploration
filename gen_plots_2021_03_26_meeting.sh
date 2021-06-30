@@ -20,6 +20,9 @@ echo "generate a list of cells with each guide combinations"
 echo "add guide ids to lexi_scrna.guides.txt"
 awk '{print NR, $0}' lexi/lexi_scrna.guides.txt > lexi/lexi_scrna_guideid_guide.txt
 
+echo "generate a histogram of all pair edit distances"
+./gen_pair_edit_distances.py -i lexi/guide_cells_per_combo_2.txt -g lexi/lexi_scrna_guideid_guide.txt | ./gen_hist.py -o lexi/edit_distance_hist.png -t "Guide Pair Edit distances" -x "Edit Distance" -y "Count"
+
 echo "filter out guide combinations that are reverse compliments (within the bounds of a minimum edit distance) of each other"
 ./gen_cells_per_guide_combo_rc_filter.py -i lexi/guide_cells_per_combo_2.txt \
   -g lexi/lexi_scrna_guideid_guide.txt \
